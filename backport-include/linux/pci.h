@@ -93,7 +93,9 @@ int __must_check pci_enable_device_mem(struct pci_dev *dev);
 		       pci_unregister_driver)
 #endif
 
-#if LINUX_VERSION_CODE < KERNEL_VERSION(3,7,0)
+/* FIXME: Not sure when some of these functions were backported
+ */
+#if LINUX_VERSION_CODE < KERNEL_VERSION(3,7,0) && LINUX_VERSION_CODE != KERNEL_VERSION(3,2,82)
 #define pcie_capability_read_word LINUX_BACKPORT(pcie_capability_read_word)
 int pcie_capability_read_word(struct pci_dev *dev, int pos, u16 *val);
 #define pcie_capability_read_dword LINUX_BACKPORT(pcie_capability_read_dword)

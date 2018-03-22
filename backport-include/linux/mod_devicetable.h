@@ -2,7 +2,11 @@
 #define __BACKPORT_MOD_DEVICETABLE_H
 #include_next <linux/mod_devicetable.h>
 
-#if LINUX_VERSION_CODE < KERNEL_VERSION(3,11,0)
+/* Kernel 3.2.59+ does include this function, see:
+ *
+ * https://patchwork.kernel.org/patch/4191251/
+ */
+#if LINUX_VERSION_CODE < KERNEL_VERSION(3,11,0) && !(LINUX_VERSION_CODE >= KERNEL_VERSION(3,2,59) && LINUX_VERSION_CODE < KERNEL_VERSION(3,3,0))
 #define DMI_EXACT_MATCH(a, b)  DMI_MATCH(DMI_PRODUCT_NAME, "BACKPORT_IGNORE")
 #endif
 
