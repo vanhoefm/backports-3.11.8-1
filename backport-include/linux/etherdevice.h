@@ -73,11 +73,11 @@ static inline void eth_random_addr(u8 *addr)
 }
 #endif
 
-/* Kernel 3.2.82 does include this function, see:
+/* Kernel 3.2.82+ does include this function, see:
  *
  * https://www.systutorials.com/linux-kernels/40477/etherdevice-introduce-help-function-eth_zero_addr-linux-3-2-82/
  */
-#if LINUX_VERSION_CODE < KERNEL_VERSION(3,7,0) && LINUX_VERSION_CODE != KERNEL_VERSION(3,2,82)
+#if LINUX_VERSION_CODE < KERNEL_VERSION(3,7,0) && !(LINUX_VERSION_CODE >= KERNEL_VERSION(3,2,82) && LINUX_VERSION_CODE < KERNEL_VERSION(3,3,0))
 
 /* This backports:
  *
