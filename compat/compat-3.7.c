@@ -22,8 +22,11 @@ bool mod_delayed_work(struct workqueue_struct *wq, struct delayed_work *dwork,
 }
 EXPORT_SYMBOL_GPL(mod_delayed_work);
 
-#ifdef CONFIG_PCI
-/*
+#if defined(CONFIG_PCI) && !(LINUX_VERSION_CODE >= KERNEL_VERSION(3,2,59) && LINUX_VERSION_CODE < KERNEL_VERSION(3,3,0))
+/* Seems like this was backported in 3.2.57+, see:
+ *
+ * http://dpdk.org/ml/archives/dev/2014-April/002142.html
+ *
  * Kernels >= 3.7 get their PCI-E Capabilities Register cached
  * via the pci_dev->pcie_flags_reg so for older kernels we have
  * no other option but to read this every single time we need
@@ -46,16 +49,10 @@ static inline u16 pcie_flags_reg(struct pci_dev *dev)
 	return reg16;
 }
 
-/* Seems like this was backported in 3.2.57+, see:
- *
- * http://dpdk.org/ml/archives/dev/2014-April/002142.html
- */
-#if !(LINUX_VERSION_CODE >= KERNEL_VERSION(3,2,59) && LINUX_VERSION_CODE < KERNEL_VERSION(3,3,0))
 static inline int pci_pcie_type(struct pci_dev *dev)
 {
 	return (pcie_flags_reg(dev) & PCI_EXP_FLAGS_TYPE) >> 4;
 }
-#endif
 
 static inline int pcie_cap_version(struct pci_dev *dev)
 {
